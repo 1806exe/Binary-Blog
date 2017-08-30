@@ -1,0 +1,42 @@
+{% extends 'blog/base.html' %}
+{% load staticfiles %}
+
+{% block title %} Home - My Blog {% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+
+            {% for post in posts %}
+                <div class="row">
+                    <div class="col-md-6 blog-img">
+                        {% if post.image %}
+                            <img class="img-responsive" src="{{ post.image.url }}" alt="">
+                        {% else %}
+                            <img class="img-responsive" src="{% static 'blog/img/w.jpg' %}" alt="">
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6 blog-detail">
+                        <h2>
+                          <a href="{{ post.get_absolute_url }}">
+                            {{ post.title }}
+                          </a>
+                        </h2>
+
+                        <p class="date">
+                        Published {{ post.publish }} by {{ post.author }}
+                        </p>
+                        {{ post.body|truncatewords:100|linebreaks }}
+
+                        <a href="{{ post.get_absolute_url }}">
+                            <span class="btn btn-default">Read More</span>
+                        </a>
+                    </div>
+                </div>
+                <br><br>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

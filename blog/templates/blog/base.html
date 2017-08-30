@@ -1,0 +1,19 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %} {% endblock %}</title>
+    <link href="{% static "blog/css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "blog/css/blog.css" %}" rel="stylesheet">
+</head>
+<body>
+    {% include 'blog/includes/navbar.html' %}
+    {% block body %}
+
+
+
+    {% endblock %}
+    <script src="{% static 'blog/js/jquery.cookie.js' %}"></script>
+    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

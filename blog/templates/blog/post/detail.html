@@ -1,0 +1,59 @@
+{% extends 'blog/base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block title %} {{ post.title }} {% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row detail">
+             <h1>{{ post.title }}</h1>
+
+          <p class="date">
+            Published {{ post.publish }} by {{ post.author }}
+          </p>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="">
+        {% else %}
+            <img class="img-responsive" src="{% static 'blog/img/w.jpg' %}" alt="">
+        {% endif %}
+        <br>
+        {{ post.body|linebreaks }}
+
+    {% with comments.count as total_comments %}
+          <h2>
+            {{ total_comments }} comment{{ total_comments|pluralize }}
+          </h2>
+    {% endwith %}
+
+            <hr>
+
+    {% for comment in comments %}
+      <div class="comment well">
+        <p class="info"><strong>
+          Comment {{ forloop.counter }} by {{ comment.name }}
+          {{ comment.created }}
+            </strong>
+        </p>
+        {{ comment.body|linebreaks }}
+      </div>
+    {% empty %}
+  <p>There are no comments yet.</p>
+    {% endfor %}
+
+
+    {% if new_comment %}
+      <h2>Your comment has been added.</h2>
+    {% else %}
+      <h2>Add a new comment</h2>
+      <form action="." method="post">
+        {{ comment_form|crispy }}
+        {% csrf_token %}
+        <p ><input class="btn btn-default" type="submit" value="Add comment"></p>
+      </form>
+    {% endif %}
+
+        </div>
+    </div>
+
+
+{% endblock %}
