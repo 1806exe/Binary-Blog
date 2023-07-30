@@ -10,17 +10,6 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
 
-  nginx:
-    restart: always
-    build: ./.config/nginx
-    volumes:
-      - static:/app/Binary-Blog/static
-      - media:/app/tz_Binary-Bloghprs/media
-    ports:
-      - "8181:8181"
-    depends_on:
-      - tz_hprs
-
   redis:
     restart: always
     image: redis:alpine
