@@ -1,0 +1,54 @@
+version: '3.7'
+
+services:
+
+  db:
+    restart: always
+    image: postgres:12-alpine
+    env_file:
+      - .env-prod
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
+  nginx:
+    restart: always
+    build: ./.config/nginx
+    volumes:
+      - static:/app/Binary-Blog/static
+      - media:/app/tz_Binary-Bloghprs/media
+    ports:
+      - "8181:8181"
+    depends_on:
+      - tz_hprs
+
+  redis:
+    restart: always
+    image: redis:alpine
+    expose:
+      - "6379"
+
+  tz_hprs:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - static:/app/Binary-Blog/static
+      - media:/app/Binary-Blog/media
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --no-input --clear
+             gunicorn website.wsgi:application --preload --bind 0.0.0.0:9091 --timeout 1200 --workers 6 --threads 6 --log-file=- --log-level debug"
+    expose:
+      - "9091"
+    depends_on:
+      - db
+      - redis
+    links:
+      - db
+      - redis
+
+
+
