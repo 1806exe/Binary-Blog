@@ -17,8 +17,9 @@ jobs:
         password: ${{ secrets.STAGE_PASSWORD }}
         port: ${{ secrets.STAGE_SSH_PORT }}
         script: whoami
-    - name: check out code
-      uses: action/check-out@v3
+
+    - name: Checkout
+      uses: actions/checkout@v3
     
     - name: check docker compose version
       run: docker-compose -f "docker-compose.yml" up -d --build
