@@ -19,5 +19,6 @@ jobs:
         script: whoami
     - name: check out code
       uses: action/check-out@v3
-      run: docker-compose -version
-  
+    
+    - name: check docker compose version
+      run: docker-compose -f "docker-compose.yml" up -d --build
