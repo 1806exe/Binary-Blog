@@ -1,21 +1,21 @@
-name: Deploy
+name: remote ssh command
 
 on:
   push:
     branches: [ master ]
 
 jobs:
-  deploy:
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: chaplyk/docker-compose-remote-action@v1.1
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v1.0.0
       with:
-        ssh_host: 41.59.227.94
-        ssh_port: 1010
-        ssh_user: ${{ secrets.HPRS_STAGE_SSH_USER }}
-        ssh_key: ${{ secrets.HPRS_STAGE_SSH_PRIVATE_KEY }}
-        compose_file: docker-compose.yml
-        pull: true
-        build: true
+        host: ${{ secrets.STAGE_HOST }}
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.STAGE_PASSWORD }}
+        port: ${{ secrets.STAGE_SSH_PORT }}
+        script: whoami
 
+  
