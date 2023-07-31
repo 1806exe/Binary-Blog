@@ -7,14 +7,15 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-
-    - uses: alex-ac/github-action-ssh-docker-compose@master
-      name: Docker-Compose Remote Deployment
-      with:
-        ssh_host: 41.59.227.94
-        ssh_port: 1010
-        ssh_private_key: ${{ secrets.HPRS_STAGE_SSH_PRIVATE_KEY }}
-        ssh_user: ${{ secrets.HPRS_STAGE_SSH_USER }}
+      # need checkout before using docker-compose-remote-action
+      - uses: actions/checkout@v2
+      - uses: chaplyk/docker-compose-remote-action@v1.1
+        with:
+          ssh_host: 41.59.227.94
+          ssh_port: 1010
+          ssh_user: ${{ secrets.HPRS_STAGE_SSH_USER }}
+          ssh_key: ${{ secrets.SSH_KEY }}
+          compose_file: docker-compose.yml
+          pull: true
+          build: true
